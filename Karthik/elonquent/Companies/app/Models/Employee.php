@@ -20,7 +20,16 @@ class Employee extends Model
         return $this->belongsToMany(ProjectEmployeeMapping::class, 'employee_id', 'id');
     }
     public function employeeAttendance(){
-        return $this->belongsToMany(EmployeeAttendance::class, 'employee_id', 'id');
+        return $this->hasMany(EmployeeAttendance::class, 'employee_id', 'id');
+    }
+
+    public function messageFromId(){
+        return $this->hasMany(EmployeeAttendance::class, 'from_employee_id', 'id');
+    }
+
+    public function messageToId()
+    {
+        return $this->hasMany(EmployeeAttendance::class, 'to_employee_id', 'id');
     }
     
 }
