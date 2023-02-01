@@ -1,0 +1,95 @@
+<ui-view>
+    <div ng-controller="viewEmployeeController">
+        <div class="employeeDetails mt-5">
+            <div class="d-flex">
+                <p class="col-3">Full Name</p>
+                <p>{{details.full_name}}</p>
+            </div>
+            <div class="d-flex">
+                <p class="col-3">Date of Birth</p>
+                <p>{{details.dob | date : "dd.MM.y" }}</p>
+            </div>
+            <div class="d-flex">
+                <p class="col-3">Gender</p>
+                <p>{{details.gender}}</p>
+            </div>
+            <div class="d-flex">
+                <p class="col-3">Phone Number</p>
+                <p>{{details.phone_number}}</p>
+            </div>
+            <div class="d-flex">
+                <p class="col-3">Email</p>
+                <p>{{details.email}}</p>
+            </div>
+            <div class="d-flex gap-3">
+                <a class="btn btn-primary" ui-sref=".editEmployee({id:details.id})">Edit</a>
+            </div>
+        </div>
+        <div class="leaveDetails mt-5">
+            <div class="header d-flex justify-content-between">
+                <h5 class="col-3">Leave Summary</h5>
+                <a class="btn btn-primary me-5" data-bs-toggle="modal" data-bs-target="#applyLeaveModal">Apply Leave</a>
+            </div>
+            <table class="table table-bordered mt-3">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Leave Type</th>
+                        <th>Reason</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="leave in leaves">
+                        <td>{{leave.from}}</td>
+                        <td>{{leave.to}}</td>
+                        <td>{{leave.type}}</td>
+                        <td>{{leave.reason}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="applyLeaveModal" tabindex="-1" aria-labelledby="applyLeaveModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="applyLeaveModalLabel">Apply Leave</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" ng-controller="ApplyLeaveController">
+                    <div class="applyLeaveForm mt-5 ms-3 justify-content-center mb-4">
+                        <div class="d-flex gap-5 mt-3">
+                            <label for="from" class="col-4">From</label>
+                            <input type="date" class="form-control" ng-model="fromDateInput"
+                                placeholder="Select From Date" />
+                        </div>
+                        <div class="d-flex gap-5 mt-3">
+                            <label for="to" class="col-4">To</label>
+                            <input type="date" class="form-control" ng-model="toDateInput" placeholder="Select To Date">
+                        </div>
+                        <div class="d-flex gap-5 mt-3">
+                            <label for="email" class="col-4">Type</label>
+                            <select class="form-control" ng-model="selectType">
+                                <option value="" selected disabled>Select</option>
+                                <option value="Casual">Casual</option>
+                                <option value="Sick">Sick</option>
+                                <option value="Marriage">Marriage</option>
+                            </select>
+                        </div>
+                        <div class="d-flex gap-5 mt-3">
+                            <label for="email" class="col-4">Reason</label>
+                            <input type="text-area" class="form-control" ng-model="reasonInput"
+                                placeholder="Enter Reason">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="applyLeave()">Apply</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui-view>

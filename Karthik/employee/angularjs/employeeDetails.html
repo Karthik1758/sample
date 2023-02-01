@@ -1,0 +1,34 @@
+<ui-view>
+  <div class="container" ng-controller="employeeDetails">
+    <div class="employeeDetails mt-5">
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>email</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="employee in employees track by $index">
+            <td>{{employee.id}}</td>
+            <td>{{employee.full_name}}</td>
+            <td>{{employee.email}}</td>
+            <td><a class="btn btn-success" ui-sref=".viewEmployee({id:employee.id})">view</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" ng-repeat="link in pagination" role="button">
+          <a class="page-link" ng-class="{'disabled': link.url == null, 'active': link.active == true}"
+            ng-click="getEmployees(link.url)">
+            {{link.label}}
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</ui-view>
