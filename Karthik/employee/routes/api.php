@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\employeeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,4 +28,6 @@ Route::post('/editEmployee/{employee}', [employeeController::class, 'editEmploye
 Route::post('/removeEmployee/{employee}', [employeeController::class, 'removeEmployee']);
 Route::post('/AddLeave', [employeeController::class, 'AddLeave']);
 Route::post('/GetEmployeeLeaves', [employeeController::class, 'GetEmployeeLeaves']);
+
+Route::post('/demoroute', [DemoController::class, 'demo'])->middleware('d');
 

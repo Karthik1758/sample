@@ -16,8 +16,11 @@ app.controller('loginController', function ($scope, $http) {
       .then(
         function (responseData) {
           // responseData=JSON.parse(responseData);
+         
           if (responseData.data.status) {
-            alert(responseData.data.message);
+          
+          alert(responseData.data.message);
+          localStorage.setItem('usertoken',responseData.data.data)
             location.assign("./home.html");
           } else {
             alert(responseData.data.message);
@@ -61,7 +64,16 @@ app.config(['$stateProvider', function ($stateProvider) {
     })
 }])
 
+//main page controller
+app.controller('homeController',function($scope,$http){
+  $http.post('',{usertoken:localStorage.getItem('usertoken')}).then(
+    function(response){
 
+    },function(error){
+      
+    }
+  )
+})
 
 
 app.controller('AddEmployee', function ($scope, $http) {

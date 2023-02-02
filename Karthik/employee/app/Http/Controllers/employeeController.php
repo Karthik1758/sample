@@ -21,8 +21,11 @@ class employeeController extends Controller
             return response()->json(['status' => false, 'message' => "Invalid Email"]);
         }
         if ($user["password"] == $loginRequest->get("password")) {
-            return response()->json(['status' => true, "message" => "Login Successful"]);
+            $bytes = random_bytes(5);
+            $token=  bin2hex($bytes);
+            return response()->json(['status' => true, "message" => "Login Successful","data"=>$token]);
         }
+       
         return response()->json(['status' => false, 'message' => "Invalid Password"]);
     }
 
