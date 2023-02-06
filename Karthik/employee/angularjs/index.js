@@ -18,9 +18,8 @@ app.controller('loginController', function ($scope, $http) {
           // responseData=JSON.parse(responseData);
          
           if (responseData.data.status) {
-          
           alert(responseData.data.message);
-          localStorage.setItem('usertoken',responseData.data.data)
+          localStorage.setItem('userToken',responseData.data.token)
             location.assign("./home.html");
           } else {
             alert(responseData.data.message);
@@ -34,8 +33,6 @@ app.controller('loginController', function ($scope, $http) {
         })
   }
 })
-
-
 
 
 app.config(['$stateProvider', function ($stateProvider) {
@@ -64,7 +61,7 @@ app.config(['$stateProvider', function ($stateProvider) {
     })
 }])
 
-//main page controller
+
 app.controller('homeController',function($scope,$http){
   $http.post('',{usertoken:localStorage.getItem('usertoken')}).then(
     function(response){

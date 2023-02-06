@@ -17,9 +17,9 @@ class EmployeeAuth
     public function handle(Request $request, Closure $next)
     {
         $token=$request->get('usertoken');
-if(!$token){
+        if(!$token){
             return response()->json(["status" => false, "message" => "Unauthorized user"]);
-}
+        }
         return $next($request);
     }
 }

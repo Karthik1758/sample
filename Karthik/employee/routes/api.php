@@ -29,5 +29,5 @@ Route::post('/removeEmployee/{employee}', [employeeController::class, 'removeEmp
 Route::post('/AddLeave', [employeeController::class, 'AddLeave']);
 Route::post('/GetEmployeeLeaves', [employeeController::class, 'GetEmployeeLeaves']);
 
-Route::post('/demoroute', [DemoController::class, 'demo'])->middleware('d');
+Route::post('/demoroute', [DemoController::class, 'login']);
 

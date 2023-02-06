@@ -7,26 +7,40 @@ use App\Http\Requests\AddLeave;
 use App\Http\Requests\editEmployee;
 use App\Http\Requests\getEmployeeDetails;
 use App\Http\Requests\GetEmployeeLeaves;
-use App\Http\Requests\loginRequest;
+// use App\Http\Requests\loginRequest;
 use App\Models\employee;
 use App\Models\Leave;
+use Auth;
+use Hash;
 use Illuminate\Http\Request;
 
 class employeeController extends Controller
 {
-    public function login(loginRequest $loginRequest)
+    public function login(Request $request)
     {
-        $user = employee::where('email', $loginRequest->get('email'))->first();
-        if (!$user) {
-            return response()->json(['status' => false, 'message' => "Invalid Email"]);
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+        $credentials = $request->all();
+        // dd($credentials);
+        $token = Auth::attempt($credentials);
+        // dd($token);
+        if (!$token) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized',
+            ], 401);
         }
-        if ($user["password"] == $loginRequest->get("password")) {
-            $bytes = random_bytes(5);
-            $token=  bin2hex($bytes);
-            return response()->json(['status' => true, "message" => "Login Successful","data"=>$token]);
-        }
-       
-        return response()->json(['status' => false, 'message' => "Invalid Password"]);
+
+        $user = Auth::user();
+        return response()->json([
+            'status' => true,
+            'message'=>'Login Successful',
+            'user' => $user,
+            'token' => $token,
+        ]);
+
     }
 
     public function AddEmployee(AddEmployee $request)
@@ -45,13 +59,14 @@ class employeeController extends Controller
         $user->phone_number = $request->get('phone_number');
         $user->email = $request->get('email');
         $user->gender = $request->get('gender');
-        $user->password = $request->get('password');
+        $user->password = Hash::make($request->get('password'));
         $user->save();
 
         return response()->json(['status' => true, "message" => "Employee Added Successfully"]);
     }
 
-    public function getEmployees(){
+    public function getEmployees()
+    {
         $employees = employee::paginate(1);
         return response()->json(['status' => true, "data" => $employees]);
     }
@@ -65,7 +80,8 @@ class employeeController extends Controller
     //     ]);
     // }
 
-    public function editEmployee(editEmployee $request, employee $employee) {
+    public function editEmployee(editEmployee $request, employee $employee)
+    {
         $employee->update($request->all());
         return response()->json(['status' => true, "message" => "Employee Updated Successfully"]);
     }
@@ -73,7 +89,7 @@ class employeeController extends Controller
 
     public function AddLeave(AddLeave $request)
     {
-        
+
         if (Leave::where('employee_id', $request->get('employee_id'))->where('from', $request->get('from'))->where('to', $request->get('to'))->exists()) {
             return response()->json(['status' => false, "message" => "Leave already Exists"]);
         }
@@ -89,7 +105,8 @@ class employeeController extends Controller
         return response()->json(['status' => true, "message" => "Leave Applied Successfully"]);
     }
 
-    public function GetEmployeeLeaves(GetEmployeeLeaves $request){
+    public function GetEmployeeLeaves(GetEmployeeLeaves $request)
+    {
         $employee_id = $request->get('employee_id');
         $details = Leave::where('employee_id', $employee_id)->get();
         return response()->json([
@@ -97,12 +114,10 @@ class employeeController extends Controller
             "data" => $details,
         ]);
     }
-    public function getEmployeeDetails(getEmployeeDetails $request){
+    public function getEmployeeDetails(getEmployeeDetails $request)
+    {
         $id = $request->get('id');
         $employees = employee::where('id', $id)->with('Leave')->first();
         return response()->json($employees);
     }
 }
-
-
-
