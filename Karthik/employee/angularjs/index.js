@@ -1,5 +1,13 @@
 let app = angular.module('employee', ['ui.router'])
 
+if (!localStorage.getItem('userToken') && !location.href.includes("index.html")) {
+  location.assign("./index.html")
+} else {
+  if (localStorage.getItem("userToken") && location.href.includes("index.html")) {
+    location.assign("./home.html")
+
+  }
+}
 
 app.controller('loginController', function ($scope, $http) {
   $scope.emailInput = '';
@@ -16,10 +24,10 @@ app.controller('loginController', function ($scope, $http) {
       .then(
         function (responseData) {
           // responseData=JSON.parse(responseData);
-         
+
           if (responseData.data.status) {
-          alert(responseData.data.message);
-          localStorage.setItem('userToken',responseData.data.token)
+            alert(responseData.data.message);
+            localStorage.setItem('userToken', responseData.data.token)
             location.assign("./home.html");
           } else {
             alert(responseData.data.message);
@@ -33,7 +41,6 @@ app.controller('loginController', function ($scope, $http) {
         })
   }
 })
-
 
 app.config(['$stateProvider', function ($stateProvider) {
   $stateProvider
@@ -62,14 +69,20 @@ app.config(['$stateProvider', function ($stateProvider) {
 }])
 
 
-app.controller('homeController',function($scope,$http){
-  $http.post('',{usertoken:localStorage.getItem('usertoken')}).then(
-    function(response){
+app.controller('homeController', function ($scope, $http) {
 
-    },function(error){
-      
+  $http.post('', { usertoken: localStorage.getItem('usertoken') }).then(
+    function (response) {
+
+    }, function (error) {
+
     }
   )
+
+  $scope.logout = () => {
+    localStorage.removeItem("userToken");
+    location.href = "index.html";
+  }
 })
 
 
@@ -206,7 +219,7 @@ app.controller("viewEmployeeController", function ($scope, $http, $stateParams) 
 });
 
 
-app.controller('ApplyLeaveController', function ($scope, $http,$stateParams) {
+app.controller('ApplyLeaveController', function ($scope, $http, $stateParams) {
   $scope.fromDateInput = '';
   $scope.toDateInput = '';
   $scope.selectType = '';
@@ -216,11 +229,11 @@ app.controller('ApplyLeaveController', function ($scope, $http,$stateParams) {
       url: 'http://127.0.0.1:8000/api/AddLeave/',
       method: 'POST',
       data: {
-        employee_id:$stateParams.id,
-        from:$scope.fromDateInput,
-        to:$scope.toDateInput,
-        type:$scope.selectType,
-        reason:$scope.reasonInput
+        employee_id: $stateParams.id,
+        from: $scope.fromDateInput,
+        to: $scope.toDateInput,
+        type: $scope.selectType,
+        reason: $scope.reasonInput
       },
     })
       .then(
