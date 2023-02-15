@@ -1,0 +1,312 @@
+<div class="billEntryForm bg-white p-2 rounded-2">
+    <div class="heading bg-primary bg-opacity-25  m-1 p-2 rounded-1" style="color: rgba(5, 78, 195, 0.96);">
+        <p class="m-0 p-0 fw-bold">OTHER BILLS</p>
+    </div>
+    <div class="col-md-7 ms-3 mt-3 border p-2 bg-secondary bg-opacity-10 rounded-2 fw-semibold"
+        style="font-size: 15px;">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="formTypeRadio" id="formTypeRadio1" value="">
+            <label class="form-check-label" for="formTypeRadio1">FORM 47-Salary Bills</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="formTypeRadio" id="formTypeRadio2" value="">
+            <label class="form-check-label" for="formTypeRadio2">Other Bills</label>
+        </div>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="formTypeRadio" id="formTypeRadio3" value="">
+            <label class="form-check-label" for="formTypeRadio3">Form 47-Supplementary Bills</label>
+        </div>
+    </div>
+    <div class="col-md-7 ms-3 p-2">
+        <div class="d-flex mt-3 fw-bold justify-content-between">
+            <p class="col-5">Select Form No:</p>
+            <div class="col-7">
+                <select class="form-control">
+                    <option selected disabled value="">Select</option>
+                    <option value="58">58</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex mt-2 fw-bold justify-content-between">
+            <p class="col-5">Select Form Type<span class="text-danger fw-bold">*</span>:</p>
+            <div class="col-7">
+                <select class="form-control">
+                    <option selected disabled value="">Select</option>
+                    <option value="58">58</option>
+                </select>
+            </div>
+        </div>
+        <div class="d-flex mt-2 fw-semibold justify-content-between">
+            <p class="col-5"></p>
+            <div class="col-7 bg-secondary bg-opacity-10 p-2 rounded-2 border border-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="adjustmentRadio" id="adjustmentRadio1" value=""
+                        checked>
+                    <label class="form-check-label" for="adjustmentRadio1">Non-adjustment</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="adjustmentRadio" id="adjustmentRadio2">
+                    <label class="form-check-label" for="adjustmentRadio2">Adjustment</label>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-2 fw-semibold justify-content-between">
+            <p class="col-5 fw-bold">Search By:</p>
+            <div class="col-7 bg-secondary bg-opacity-10 p-2 rounded-2 border border-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="" id="inlineRadioAccNO" value="" checked>
+                    <label class="form-check-label" for="inlineRadio1">Account Number</label>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-2 fw-semibold justify-content-between">
+            <p class="col-5 fw-bold">Select Entry type:</p>
+            <div class="col-7 bg-secondary bg-opacity-10 p-2 rounded-2 border border-1">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="entryTypeRadio" id="entryTypeRadio1" value=""
+                        checked>
+                    <label class="form-check-label" for="entryTypeRadio2">Single</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="entryTypeRadio" id="entryTypeRadio2">
+                    <label class="form-check-label" for="entryTypeRadio2">Bulk</label>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex mt-2 fw-bold">
+            <p class="col-5">Enter Agency/Party A/c No:<span class="text-danger fw-bolder">*</span></p>
+            <div class="col-7 d-flex">
+                <input type="text" class="form-control" name="agencyName" required>
+                <a class="btn ms-2 px-4 text-white" style="background-color: #1b354d;">Search</a>
+            </div>
+        </div>
+        <div class="entry border border-2 rounded-2 mt-3 bg-primary bg-opacity-10 p-2">
+            <div class="d-flex fw-semibold justify-content-between align-items-center">
+                <p class="col-5 fw-bold">Name</p>
+                <p class="col-7">..</p>
+            </div>
+            <div class="d-flex fw-semibold justify-content-between align-items-center">
+                <p class="col-5 fw-bold">Account No</p>
+                <p class="col-7">..</p>
+            </div>
+            <div class="d-flex fw-semibold justify-content-between align-items-center">
+                <p class="col-5 fw-bold">Bank Name</p>
+                <p class="col-7">..</p>
+            </div>
+            <div class="d-flex fw-semibold justify-content-between align-items-center">
+                <p class="col-5 fw-bold">Branch</p>
+                <p class="col-7">..</p>
+            </div>
+            <div class="d-flex fw-semibold">
+                <p class="col-5 fw-bold">IFSCCODE</p>
+                <p class="col-7">..</p>
+            </div>
+            <div class="d-flex mt-1  fw-bold justify-content-between align-items-center">
+                <p class="col-5">Select Form No:</p>
+                <div class="col-7">
+                    <input type="text" class="form-control mb-2">
+                </div>
+            </div>
+            <div class="d-flex my-2 justify-content-between align-items-center">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">PT Dedn<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;">(Any amount added in PT Dedn will be
+                        credited to DDO's account)</p>
+                </div>
+                <div class="col-7">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex my-2 justify-content-between align-items-center">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">TDS(IT)<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;">(Any amount added in TDS(IT) will be
+                        credited to DDO's account)</p>
+                </div>
+                <div class="col-7">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex my-2 justify-content-between align-items-center">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">GST<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;">(Any amount added in GST will be
+                        credited to DDO's account)</p>
+                </div>
+                <div class="col-7">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex mb-3 justify-content-between align-items-center">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">GIS<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;"> </p>
+                </div>
+                <div class="col-7">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex my-2 justify-content-between align-items-center">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">Telangana Haritha Nidhi<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;">(Any amount added in Telangana Haritha Nidhi
+                        will be
+                        credited to DDO's account)</p>
+                </div>
+                <div class="col-7">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="d-flex my-2 justify-content-between align-items-center border-bottom">
+                <div class="col-5">
+                    <p class="m-0 p-0 fw-bold">Agency Net Amount<span class="text-danger">*</span></p>
+                    <p class="m-0 p-0 fw-semibold" style="font-size: 13px;"></p>
+                </div>
+                <p class="col-7">.</p>
+            </div>
+            <div class="d-flex justify-content-center">
+                <a class="btn text-white" href="" style="background-color: #1b354d;">ADD</a>
+            </div>
+        </div>
+    </div>
+    <div class="transactions mt-3 mx-3">
+        <div class="d-flex justify-content-between align-items-center  fs-10">
+            <p class="fw-bold mt-2">AGENCY/EMPLOYEE LIST</p>
+            <a class="btn btn-success btn-sm d-flex gap-2 justify-content-between align-items-center bg-opacity-75"
+                href="">
+                <i class="fas fa-solid fa-print"></i>
+                <p class="m-0 p-0 fw-semibold">OFFICE COPY</p>
+            </a>
+        </div>
+        <table class="table table-bordered">
+            <thead class="bg-primary bg-opacity-10" style="color: rgba(5, 78, 195, 0.96);">
+                <tr>
+                    <th>S.No</th>
+                    <th>Name/GST No.</th>
+                    <th>Bank Name</th>
+                    <th>Bank Branch</th>
+                    <th>IFSC CODE</th>
+                    <th>A/c No</th>
+                    <th>Gross<span>(in Rs.)</span></th>
+                    <th>PT Dedn<span>(in Rs.)</span></th>
+                    <th>TDS(IT)<span>(in Rs.)</span></th>
+                    <th>GST<span>(in Rs.)</span></th>
+                    <th>GIS<span>(in Rs.)</span></th>
+                    <th>Telangana Haritha Nidhi<span>(in Rs.)</span></th>
+                    <th>Net Amount<span>(in Rs.)</span></th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="bg-warning bg-opacity-10 ms-3 mt-3 p-2 rounded-2 fw-semibold"
+            style="font-size: 15px;color: rgb(170, 72, 6);">
+            <p class="p-0 m-0">If you dont find HOA for the bill please select <strong class="mx-1">Other</strong>option
+            </p>
+        </div>
+        <div class="col-md-8 mt-3 ms-2">
+            <div class="d-flex align-items-center">
+                <p class="p-0 m-0 col-4 fw-bold">Select Head of Account<span class="text-danger">*</span></p>
+                <select class="form-control my-1">
+                    <option selected disabled value="">Select</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="p-0 m-0 col-4 fw-bold">Agency Reference Number<span class="text-danger">*</span></p>
+                <input type="text" class="form-control my-1">
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="p-0 m-0 col-4 fw-bold"></p>
+                <p class="m-0 p-0 fw-semibold" style="font-size: 12px;">* Enter phoneno of telephone bill,Water can
+                    number of water bill ...etc</p>
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="p-0 m-0 col-4 fw-bold">Enter Service Major Head<span class="text-danger">*</span></p>
+                <input type="text" class="form-control my-1">
+            </div>
+            <div class="d-flex align-items-center">
+                <p class="p-0 m-0 col-4 fw-bold">Enter Purpose<span class="text-danger">*</span></p>
+                <textarea type="textarea" class="form-control my-1"></textarea>
+            </div>
+        </div>
+        <div class="scrutiny">
+            <p class="ms-2 mt-3 pb-2 border-bottom fw-bold">SCRUTINY ITEMS</p>
+            <table class="table table-bordered">
+                <thead class="bg-primary bg-opacity-10" style="color: rgba(5, 78, 195, 0.96);">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Description</th>
+                        <th>Yes</th>
+                        <th>No</th>
+                        <th>N/A</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="attachments">
+            <p class="ms-2 mt-3 pb-2 border-bottom fw-bold">ATTACHMENTS</p>
+            <table class="table table-bordered">
+                <thead class="bg-primary bg-opacity-10" style="color: rgba(5, 78, 195, 0.96);">
+                    <tr>
+                        <th>S.No</th>
+                        <th>Description</th>
+                        <th class="col-4">Upload</th>
+                        <th>Uploaded Files</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="fw-semibold">
+                        <td>1</td>
+                        <td>Others</td>
+                        <td>
+                            <div class="file">
+                                <input type="file" class="form-control">
+                            </div>
+                            <textarea type="textarea" class="form-control mt-2"
+                                placeholder="Enter Remarks here..."></textarea>
+                            <a class="btn btn-success text-white mx-1 my-3">ADD</a>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex my-4 col-4 border border-1 rounded-2">
+            <select class="form-select border-0">
+                <option selected disabled>Select Phone Number</option>
+            </select>
+            <a class="btn btn-success text-white col-4 align-items-center pt-2" style="font-size: 12px;">GENERATE
+                OTP</a>
+        </div>
+        <p style="border-bottom:2px dashed lightgray; "></p>
+        <div class="d-flex justify-content-center mb-3">
+            <a class="btn text-white" style="background-color: #1b354d;">SUBMIT BILL</a>
+        </div>
+    </div>
+</div>

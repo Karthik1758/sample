@@ -1,0 +1,16 @@
+.header{
+    border-bottom: 5px solid pink;
+}
+.sidebar ul a{
+   background-color: #1b354d;
+   color: white;
+   font-size: 15px;
+   padding-left: 25px;
+   border-bottom:1px solid #6b686875;
+}
+body{
+    font-size: 15px;
+}
+table th span{
+    font-size: 10px;
+}
