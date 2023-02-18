@@ -6,12 +6,12 @@
         style="font-size: 15px;">
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="false"
-                ng-model="editable">
+                ng-model="editable" ng-click="clear()">
             <label class="form-check-label" for="inlineRadio1">Add Single Agency</label>
         </div>
         <div class="form-check form-check-inline">
             <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="true"
-                ng-model="editable">
+                ng-model="editable" ng-click="clear()">
             <label class="form-check-label" for="inlineRadio2">Edit Agency Details</label>
         </div>
     </div>
@@ -59,6 +59,10 @@
                     <a class="btn ms-5 text-white" style="background-color: #1b354d;"
                         ng-click="searchIfscCode()">Search</a>
                 </div>
+                <div class="d-flex">
+                    <p class="col-4"></p>
+                    <p class="col-5 text-danger" ng-bind="error"></p>
+                </div>
                 <div class="d-flex mt-2 ">
                     <p class="col-4 fw-semibold ">Bank Name</p>
                     <p class="col-5" ng-bind="details.bank_name">-</p>
@@ -69,7 +73,7 @@
                 </div>
                 <div class="d-flex mt-2 ">
                     <p class="col-4 fw-semibold ">Branch</p>
-                    <p class="col-5" ng-bind="details.state">-</p>
+                    <p class="col-5" ng-bind="details.branch">-</p>
                 </div>
                 <div class="d-flex mt-2 ">
                     <p class="col-4 fw-semibold ">IFSC Code</p>
@@ -81,53 +85,84 @@
             <a class="btn text-white" style="background-color: #1b354d;" ng-click="addAgency()">ADD NEW AGENCY</a>
         </div>
     </div>
-    <div class="editAgency col-md-7 m-4 border p-2 rounded-2" ng-if="editable=='true'">
-        <div class="d-flex m-2 fw-bold pb-4" style="border-bottom:2px dashed lightgray  ;">
-            <p class="m-0 p-0">Bank Ac No.:</p>
+    <div class="editAgency col-md-7 m-4 border p-2 rounded-2" ng-show="editable=='true'">
+        <div class="d-flex mt-2 mx-2 fw-bold">
+            <p class="m-0 p-0 col-2">Bank Ac No.:</p>
             <div class="col-4">
-                <input type="text" class="form-control" name="agencyName" required>
+                <input type="text" class="form-control" name="agencyName" required ng-model="accountNumber">
             </div>
-            <a class="btn ms-2 text-white" style="background-color: #1b354d;">Search Agency</a>
+            <a class="btn ms-2 text-white" style="background-color: #1b354d;" ng-click="searchAgency()">Search
+                Agency</a>
         </div>
-        <div class="d-flex m-2 p-2">
-            <p class="m-0 p-0 col-3 fw-bold">Name:</p>
-            <p class="m-0 p-0">...</p>
+        <div class="d-flex pb-2" style="border-bottom:2px dashed lightgray  ;">
+            <p class="col-2"></p>
+            <p class="col-5 text-danger" ng-bind="agencyError"></p>
         </div>
-        <div class="d-flex m-2 p-2">
-            <p class="m-0 p-0 col-3 fw-bold">Bank Ac No.:</p>
-            <p class="m-0 p-0">...</p>
-        </div>
-        <div class="d-flex m-2 p-2">
-            <p class="m-0 p-0 col-3 fw-bold">IFSC:</p>
-            <p class="m-0 p-0">...</p>
-        </div>
-        <div class="d-flex m-2 p-2 pb-4" style="border-bottom:2px dashed lightgray  ;">
-            <p class="m-0 p-0 col-3 fw-bold">PAN:</p>
-            <p class="m-0 p-0">...</p>
-        </div>
-        <div class="d-flex m-2 p-2">
-            <p class="col-2 m-0 p-0 fw-bold">New Agency Name:</p>
-            <div class="col-5 ms-5">
-                <input type="text" class="form-control" name="agencyName" required>
+        <div ng-show="found">
+            <div class="d-flex m-2 p-2">
+                <p class="m-0 p-0 col-3 fw-bold">Name:</p>
+                <p class="m-0 p-0">{{agencyDetails.name}}</p>
             </div>
-        </div>
-        <div class="d-flex m-2 p-2">
-            <p class="col-2 m-0 p-0 fw-bold">GSTIN:</p>
-            <div class="col-5 ms-5">
-                <input type="text" class="form-control" name="agencyName" required>
+            <div class="d-flex m-2 p-2">
+                <p class="m-0 p-0 col-3 fw-bold">Bank Ac No.:</p>
+                <p class="m-0 p-0">{{agencyDetails.account_number}}</p>
             </div>
-        </div>
-        <div class="d-flex m-2 p-2 fw-bold pb-4">
-            <p class="col-2 m-0 p-0 fw-bold">New IFSC:</p>
-            <div class="col-5 ms-5 d-flex border rounded-2">
-                <input type="text" class="form-control border-0" name="agencyName" required>
-                <a class="btn text-white " style="background-color: #1b354d;">Search</a>
+            <div class="d-flex m-2 p-2">
+                <p class="m-0 p-0 col-3 fw-bold">IFSC:</p>
+                <p class="m-0 p-0">{{agencyDetails.ifsc_code}}</p>
             </div>
-        </div>
-        <div class="d-flex m-2 p-2">
-            <p class="col-2 m-0 p-0 fw-bold"></p>
-            <a class="btn btn-success col-3 ms-5">UPDATE AGENCY
-            </a>
+            <div class="d-flex m-2 p-2 pb-4" style="border-bottom:2px dashed lightgray  ;">
+                <p class="m-0 p-0 col-3 fw-bold">PAN:</p>
+                <p class="m-0 p-0">...</p>
+            </div>
+            <div class="d-flex m-2 p-2">
+                <p class="col-2 m-0 p-0 fw-bold">New Agency Name:</p>
+                <div class="col-5 ms-5">
+                    <input type="text" class="form-control" name="agencyName" required ng-model="agencyName">
+                </div>
+            </div>
+            <div class="d-flex m-2 p-2">
+                <p class="col-2 m-0 p-0 fw-bold">GSTIN:</p>
+                <div class="col-5 ms-5">
+                    <input type="text" class="form-control" name="gstIn" ng-model="editAgencyInput" required>
+                </div>
+            </div>
+            <div class="d-flex mt-2 mx-2 p-2 fw-bold">
+                <p class="col-2 m-0 p-0 fw-bold">New IFSC:</p>
+                <div class="col-5 ms-5 d-flex border rounded-2">
+                    <input type="text" class="form-control border-0" name="ifscCode" required ng-model="ifscCodeInput">
+                    <a class="btn text-white " style="background-color: #1b354d;" ng-click="searchIfscCode()">Search</a>
+                </div>
+            </div>
+
+            <div class="d-flex pb-3">
+                <p class="col-3"></p>
+                <p class="col-5 text-danger" ng-bind="error"></p>
+            </div>
+            <div class="mx-2 p-2" ng-show="ifsc">
+                <div class="d-flex">
+                    <p class="col-4 fw-semibold ">Bank Name</p>
+                    <p class="col-5" ng-bind="details.bank_name">-</p>
+                </div>
+                <div class="d-flex">
+                    <p class="col-4 fw-semibold ">State</p>
+                    <p class="col-5" ng-bind="details.state">-</p>
+                </div>
+                <div class="d-flex">
+                    <p class="col-4 fw-semibold ">Branch</p>
+                    <p class="col-5" ng-bind="details.branch">-</p>
+                </div>
+                <div class="d-flex">
+                    <p class="col-4 fw-semibold ">IFSC Code</p>
+                    <p class="col-5" ng-bind="details.ifsc_code">-</p>
+                </div>
+            </div>
+            <div class="d-flex m-2 p-2">
+                <p class="col-2 m-0 p-0 fw-bold"></p>
+                <a class="btn btn-success col-3 ms-5" ng-click="editAgency()">UPDATE AGENCY
+                </a>
+            </div>
         </div>
     </div>
+</div>
 </div>

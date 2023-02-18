@@ -12,4 +12,7 @@ class Agency extends Model
         'account_number',
         'ifsc_code',
     ];
+    public function bankIfsc(){
+        return $this->belongsTo(IfscCode::class,'ifsc_code','ifsc_code');
+    }
 }

@@ -21,3 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/getIfscCodeDetails',[IfmisController::class,'getIfscCodeDetails']);
+Route::post('/addAgency',[IfmisController::class,'addAgency']);
+Route::post('/getAgency',[IfmisController::class,'getAgency']);
+Route::post('/editAgency/{agency}',[IfmisController::class,'editAgency']);
+Route::post('/getFormNumber',[IfmisController::class,'getFormNumber']);
+Route::post('/getFormType',[IfmisController::class,'getFormType']);
+

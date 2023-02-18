@@ -102,6 +102,15 @@ CREATE TABLE scrutiny_items(
     form_type_id INT REFERENCES form_type(id)
 );
 
+CREATE TABLE scrutiny_answers(
+    id BIGSERIAL PRIMARY KEY,
+    question VARCHAR(250),
+    asnwer VARCHAR(10)
+);
+-> bill_id
+-> question
+-> asnwer
+
 
 
 
