@@ -39,7 +39,7 @@
             <div class="d-flex mt-2 fw-bold justify-content-between" ng-show="formNumberSelect">
                 <p class="col-5">Select Form Type<span class="text-danger fw-bold">*</span>:</p>
                 <div class="col-7">
-                    <select class="form-control" ng-model="formTypeSelect">
+                    <select class="form-control" ng-model="formTypeSelect" ng-change="getHoaScrutinyItems()">
                         <option selected disabled value="">Select</option>
                         <option ng-repeat="formType in formTypes track by $index" value={{formType.id}}>
                             {{formType.form_type}}</option>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="d-flex fw-semibold justify-content-between align-items-center">
                     <p class="col-5 fw-bold">Account No</p>
-                    <p class="col-7">{{agencyDetails.name}}</p>
+                    <p class="col-7">{{agencyDetails.account_number}}</p>
                 </div>
                 <div class="d-flex fw-semibold justify-content-between align-items-center">
                     <p class="col-5 fw-bold">Bank Name</p>
@@ -115,9 +115,9 @@
                     <p class="col-7">{{agencyDetails.bank_ifsc.ifsc_code}}</p>
                 </div>
                 <div class="d-flex mt-1  fw-bold justify-content-between align-items-center">
-                    <p class="col-5">Gross:</p>
+                    <p class="col-5">Gross:<span class="text-danger">*</span></p>
                     <div class="col-7">
-                        <input type="number" class="form-control mb-2" ng-model="gross">
+                        <input type="number" class="form-control mb-2" ng-model="gross" ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex my-2 justify-content-between align-items-center">
@@ -127,7 +127,7 @@
                             credited to DDO's account)</p>
                     </div>
                     <div class="col-7">
-                        <input type="number" class="form-control" ng-model="ptDeduction">
+                        <input type="number" class="form-control" ng-model="ptDeduction" ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex my-2 justify-content-between align-items-center">
@@ -137,7 +137,7 @@
                             credited to DDO's account)</p>
                     </div>
                     <div class="col-7">
-                        <input type="number" class="form-control" ng-model="tdsIt">
+                        <input type="number" class="form-control" ng-model="tdsIt" ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex my-2 justify-content-between align-items-center">
@@ -147,7 +147,7 @@
                             credited to DDO's account)</p>
                     </div>
                     <div class="col-7">
-                        <input type="number" class="form-control" ng-model="gst">
+                        <input type="number" class="form-control" ng-model="gst" ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex mb-3 justify-content-between align-items-center">
@@ -156,7 +156,7 @@
                         <p class="m-0 p-0 fw-semibold" style="font-size: 13px;"> </p>
                     </div>
                     <div class="col-7">
-                        <input type="number" class="form-control" ng-model="gis">
+                        <input type="number" class="form-control" ng-model="gis" ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex my-2 justify-content-between align-items-center">
@@ -168,7 +168,8 @@
                             credited to DDO's account)</p>
                     </div>
                     <div class="col-7">
-                        <input type="number" class="form-control" ng-model="telanganaHarithaNidhi">
+                        <input type="number" class="form-control" ng-model="telanganaHarithaNidhi"
+                            ng-change="updateNetAmount()">
                     </div>
                 </div>
                 <div class="d-flex my-2 justify-content-between align-items-center border-bottom">
@@ -176,14 +177,14 @@
                         <p class="m-0 p-0 fw-bold">Agency Net Amount<span class="text-danger">*</span></p>
                         <p class="m-0 p-0 fw-semibold" style="font-size: 13px;"></p>
                     </div>
-                    <p class="col-7">{{netAmount=gross+ptDeduction+gst+gis+tdsIt+telanganaHarithaNidhi}}</p>
+                    <p class="col-7">{{netAmount}}</p>
                 </div>
                 <div class="d-flex justify-content-center">
                     <a class="btn text-white" href="" style="background-color: #1b354d;" ng-click="addBill()">ADD</a>
                 </div>
             </div>
         </div>
-        <div class="transactions mt-3 mx-3" ng-show="billList">
+        <div class="transactions mt-3 mx-3" ng-show="agencyBill.length>0">
             <div class="d-flex justify-content-between align-items-center  fs-10">
                 <p class="fw-bold mt-2">AGENCY/EMPLOYEE LIST</p>
                 <a class="btn btn-success btn-sm d-flex gap-2 justify-content-between align-items-center bg-opacity-75"
@@ -220,13 +221,23 @@
                         <td>{{agencyBill.agency_ifsc_code}}</td>
                         <td>{{agencyBill.agency_account_number}}</td>
                         <td>{{agencyBill.agency_gross}}</td>
-                        <td>{{agencyBill.agency_ptDeduction}}</td>
+                        <td>{{agencyBill.agency_pt_deduction}}</td>
                         <td>{{agencyBill.agency_tdsIt}}</td>
                         <td>{{agencyBill.agency_gst}}</td>
-                        <td>{{agencyBill.agencyBill.agency_gis}}</td>
+                        <td>{{agencyBill.agency_gis}}</td>
                         <td>{{agencyBill.agency_telangana_haritha_nidhi}}</td>
                         <td>{{agencyBill.agency_net_amount}}</td>
-                        <td><a class="btn btn-danger text-white">Remove</a></td>
+                        <td><a class="btn btn-danger text-white" ng-click="removeEntry($index)">Remove</a></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="text-end">Total</td>
+                        <td>{{agencyBill | sumOfValue:'agency_gross'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_pt_deduction'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_tdsIt'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_gst'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_gis'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_telangana_haritha_nidhi'}}</td>
+                        <td>{{agencyBill | sumOfValue:'agency_net_amount'}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -240,13 +251,17 @@
             <div class="col-md-8 mt-3 ms-2">
                 <div class="d-flex align-items-center">
                     <p class="p-0 m-0 col-4 fw-bold">Select Head of Account<span class="text-danger">*</span></p>
-                    <select class="form-control my-1">
+                    <select class="form-control my-1" ng-model="selectHoa"
+                        ng-change="serviceHead=selectHoa.substring(0, 4)">
                         <option selected disabled value="">Select</option>
+                        <option value="{{hoaDetail.hoa}}" ng-repeat="hoaDetail in hoaDetails track by $index">
+                            {{hoaDetail.hoa_tier}}</option>
+                        <option value="">Other</option>
                     </select>
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="p-0 m-0 col-4 fw-bold">Agency Reference Number<span class="text-danger">*</span></p>
-                    <input type="text" class="form-control my-1">
+                    <input type="text" class="form-control my-1" ng-model="referenceNumber">
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="p-0 m-0 col-4 fw-bold"></p>
@@ -255,11 +270,11 @@
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="p-0 m-0 col-4 fw-bold">Enter Service Major Head<span class="text-danger">*</span></p>
-                    <input type="text" class="form-control my-1">
+                    <input type="text" class="form-control my-1" ng-model="serviceHead">
                 </div>
                 <div class="d-flex align-items-center">
                     <p class="p-0 m-0 col-4 fw-bold">Enter Purpose<span class="text-danger">*</span></p>
-                    <textarea type="textarea" class="form-control my-1"></textarea>
+                    <textarea type="textarea" class="form-control my-1" ng-model="purpose"></textarea>
                 </div>
             </div>
             <div class="scrutiny">
@@ -275,12 +290,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                        <tr ng-repeat="scrutinyItem in scrutinyAnswers track by $index">
+                            <td>{{$index+1}}</td>
+                            <td>{{scrutinyItem.description}}</td>
+                            <td>
+                                <input class="form-check-input" type="radio" name="ScrutinyItem+{{$index}}"
+                                    id="inlineRadioScrutinyItems1" value="yes" ng-model="scrutinyItem['answer']">
+                            </td>
+                            <td>
+                                <input class="form-check-input" type="radio" name="ScrutinyItem+{{$index}}"
+                                    id="inlineRadioScrutinyItems2" value="no" ng-model="scrutinyItem['answer']">
+                            </td>
+                            <td>
+                                <input class="form-check-input" type="radio" name="ScrutinyItem+{{$index}}"
+                                    id="inlineRadioScrutinyItems3" value="n\a" ng-model="scrutinyItem['answer']">
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -302,27 +326,50 @@
                             <td>Others</td>
                             <td>
                                 <div class="file">
-                                    <input type="file" class="form-control">
+                                    <input type="file" class="form-control" id="attachments">
                                 </div>
-                                <textarea type="textarea" class="form-control mt-2"
-                                    placeholder="Enter Remarks here..."></textarea>
-                                <a class="btn btn-success text-white mx-1 my-3">ADD</a>
+                                <textarea type="textarea" class="form-control mt-2" placeholder="Enter Remarks here..."
+                                    ng-model="remarks"></textarea>
+                                <a class="btn btn-success text-white mx-1 my-3" ng-click="addFile()">ADD</a>
                             </td>
-                            <td></td>
+                            <td>
+                                <div class="" ng-repeat="attachment in attachmentsArray">
+                                    <div class="d-flex gap-2 justify-content-between">
+                                        <p class="m-0 fw-semibold">
+                                            <span class="">{{attachment.path}}</span>
+                                        </p>
+                                        <span ng-click="removeFile($index)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                            </svg>
+                                        </span>
+                                    </div>
+                                    <span class="text-warning opacity-50 fw-normal">{{attachment.remarks}}</span>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="d-flex my-4 col-4 border border-1 rounded-2">
-                <select class="form-select border-0">
+                <select class="form-select border-0" ng-model="phoneNumber">
                     <option selected disabled>Select Phone Number</option>
+                    <option value="1234567890">1234567890</option>
+                    <option value="9874563210">9874563210</option>
                 </select>
-                <a class="btn btn-success text-white col-4 align-items-center pt-2" style="font-size: 12px;">GENERATE
+                <a class="btn btn-success text-white col-4 align-items-center pt-2" style="font-size: 12px;" ng-click="generateOtp()">GENERATE
+                    OTP</a>
+            </div>
+            <div class="d-flex my-4 col-3 border rounded-2" ng-show="otp">
+                <input type="text" class="form-control border-0" ng-model="otpInput">
+                <a class="btn btn-success text-white col-4 align-items-center pt-2" style="font-size: 12px;" ng-click="verifyOtp()">Verify
                     OTP</a>
             </div>
             <p style="border-bottom:2px dashed lightgray; "></p>
             <div class="d-flex justify-content-center mb-3">
-                <a class="btn text-white" style="background-color: #1b354d;">SUBMIT BILL</a>
+                <a class="btn text-white" style="background-color: #1b354d;" ng-click="submitBill()">SUBMIT BILL</a>
             </div>
         </div>
     </div>

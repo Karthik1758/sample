@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditAgencyRequest extends FormRequest
+class SubmitBillRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,9 @@ class EditAgencyRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required',
+            'hoa'=>'required',
+            'reference_number'=>'required',
+            'purpose'=>'required'
         ];
     }
 }

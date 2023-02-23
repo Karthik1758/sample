@@ -1,0 +1,229 @@
+<div class="bg-white p-2 rounded-2" id="bill" ng-controller="ViewBillController">
+    <div class="border border-2">
+        <div class="text-center mt-3">
+            <h5 class="m-0 p-0">TSTC FORM-{{billData[0].form_type.form_number.form_number}}</h5>
+            <h5 class="m-0 p-0">FULLY VOUCHED CONTINGENT BILL</h5>
+            <p class="m-0 p-0 fw-semibold">Bill For {{billData[0].form_type.form_type}}</p>
+            <p class="m-0 p-0 fw-semibold">FOR THE MONTH & YEAR {{billData[0].created_at | date :  "MM"}} & {{billData[0].created_at | date :  "y"}}</p>
+        </div>
+        <div class="row justify-content-between gap-3 mt-3">
+            <div class="col-4 ms-5">
+                <div class="row justify-content-between ps-2">
+                    <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Dist:</p>
+                    <p class="p-0 m-0 col-5 fw-semibold" style="font-size: 15px;">Hyderabad</p>
+                </div>
+                <div class="row justify-content-between pt-4 my-1 ps-2">
+                    <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">TBR No:</p>
+                    <p class="p-0 m-0 col-5 fw-semibold" style="font-size: 15px;">{{billData[0].reference_number}}</p>
+                </div>
+            </div>
+            <div class="col-4 mx-5 border border-2">
+                <p class="m-0 p-0 text-center  fw-semibold" style="font-size: 15px;">(For Treasury Use Only)</p>
+                <div class="row justify-content-between ps-4 pt-2">
+                    <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Date</p>
+                    <p class="p-0 m-0 col-5 fw-semibold" style="font-size: 15px;">{{billData[0].created_at | date :  "dd-MM-y"}}</p>
+                </div>
+                <div class="row justify-content-between pt-2 ps-4">
+                    <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Trans Id:</p>
+                    <p class="p-0 m-0 col-5" style="font-size: 15px;"></p>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-3 mt-2 pb-4 pt-2" style="border:3px solid rgb(149, 149, 149);">
+            <div class="col-6" style="border-right: 1px solid grey;">
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Treasury/PAO CODE</p>
+                    <p></p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">DDO CODE:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">20000142011</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">DDO DESIGNATION:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">Asst Accounts Officer</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">DDO Office Name:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">Commissioner Of Police Hyderabad City
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">BANK BRANCH CODE:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">5000004571</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">BANK BRANCH NAME:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">Treasury Branch Hyderabad(GUNFOUNDRY)
+                    </p>
+                </div>
+            </div>
+            <div class="col-6 ps-3">
+                <div class="d-flex justify-content-between pb-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Major head:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.mjh}}({{billData[0].hoa.mjh_desc}})</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Sub Major head:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.smjh}}({{billData[0].hoa.smjh_desc}})</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Minor head:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.mih}}({{billData[0].hoa.mih_desc}})</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Group Sub Head</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.gsh}}({{billData[0].hoa.gsh_desc}})</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Sub Head</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.sh}}({{billData[0].hoa.sh_desc}})
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Detailed head:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.dh}}({{billData[0].hoa.dh_desc}})</p>
+                </div>
+                <div class="d-flex justify-content-between p-1">
+                    <p class="p-0 m-0 col-4 fw-bold" style="font-size: 15px;">Sub Detailed head:</p>
+                    <p class="p-0 m-0 col-6 fw-semibold" style="font-size: 15px;">{{billData[0].hoa.sdh}}({{billData[0].hoa.sdh_desc}})</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex gap-5 mx-3 py-2" style="border-bottom:3px solid rgb(149, 149, 149);">
+            <p class="p-0 m-0 col-3 fw-bold" style="font-size: 15px;">NON-PLAN</p>
+            <p class="p-0 m-0 col-3 fw-bold" style="font-size: 15px;">VOTED</p>
+            <p class="p-0 m-0  fw-bold" style="font-size: 15px;">Non-contingency Fund MH/Service Major Head:<span
+                    class="fw-semibold">{{billData[0].hoa.mjh}}</span></p>
+        </div>
+        <div class="d-flex gap-5 mx-3 pt-2">
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Gross:<span class="fw-semibold">{{billData[0].gross}}</span></p>
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Pt Dedn:<span class="fw-semibold">{{billData[0].pt_deduction}}</span></p>
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">TDS(IT):<span class="fw-semibold">{{billData[0].tds}}</span></p>
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">GST:<span class="fw-semibold">{{billData[0].gst}}</span></p>
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">GIS:<span class="fw-semibold">{{billData[0].gis}}</span></p>
+        </div>
+        <div class="d-flex gap-5 mx-3 pb-2" style="border-bottom:3px solid rgb(149, 149, 149);">
+            <p class="p-0 m-0 col-3 fw-bold" style="font-size: 15px;">Telangana Haritha Nidhi:<span
+                    class="fw-semibold">{{billData[0].telangana_haritha_nidhi}}</span></p>
+            <p class="p-0 m-0 col-2 fw-bold" style="font-size: 15px;">Net:<span class="fw-semibold">{{billData[0].net_amount}}</span></p>
+        </div>
+        <p class="fw-bold mx-3 my-1" style="font-size: 15px;">Passed for Rs.{{billData[0].net_amount | number : 2}}<span class="fw-semibold">(Rupee {{billData[0].net_amount | numberToWord}} Only) and the same amount may be credited in A/c of</span></p>
+        <div class="m-3">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Name/GST No.</th>
+                        <th>Bank Name</th>
+                        <th>Bank Branch</th>
+                        <th>IFSC CODE</th>
+                        <th>A/c No</th>
+                        <th>Gross<span>(in Rs.)</span></th>
+                        <th>PT Dedn<span>(in Rs.)</span></th>
+                        <th>TDS(IT)<span>(in Rs.)</span></th>
+                        <th>GST<span>(in Rs.)</span></th>
+                        <th>GIS<span>(in Rs.)</span></th>
+                        <th>Telangana Haritha Nidhi<span>(in Rs.)</span></th>
+                        <th>Net Amount<span>(in Rs.)</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in agencyBill">
+                        <td>{{$index+1}}</td>
+                        <td>{{data.agency_name}}</td>
+                        <td>{{data.agency_bank_name}}</td>
+                        <td>{{data.agency_branch}}</td>  
+                        <td>{{data.ifsc_code}}</td>  
+                        <td>{{data.agency_account_number}}</td>
+                        <td>{{data.gross}}</td>
+                        <td>{{data.pt_deduction}}</td>
+                        <td>{{data.tds}}</td>
+                        <td>{{data.gst}}</td>
+                        <td>{{data.gis}}</td>
+                        <td>{{data.telangana_haritha_nidhi}}</td>
+                        <td>{{data.net_amount}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-center mx-3" style="border-top:3px solid rgb(149, 149, 149);">
+            <p class="p-0 m-0 fw-bold py-1" style="font-size: 15px;">(FOR USE IN TREASURY / PAY & ACCOUNTS OFFICE ONLY)
+            </p>
+        </div>
+        <p class="p-0 m-0 fw-semibold py-1 mt-4 ms-3" style="font-size: 15px;">Pay
+            Rs_____________________________(Rupees__________________________________________________________________________________________)
+            by cash/cheque/Account credit
+        </p>
+        <div class="d-flex mt-3">
+            <p class="m-0 p-0 col-7"></p>
+            <p class="p-0 m-0 fw-semibold py-1" style="font-size: 15px;">Treasury Officer/PAY & ACCOUNTS Officer</p>
+        </div>
+        <div class="ms-4">
+            <p class="p-0 m-0 fw-bold py-1" style="font-size: 15px;">Purpose</p>
+            <p class="p-0 m-0 fw-semibold py-1" style="font-size: 15px;">For month of January</p>
+        </div>
+        <p class="p-0 m-0 fw-bold py-1 ms-3 mt-3" style="font-size: 15px;">(Rupee {{billData[0].net_amount | numberToWord}} Only)</p>
+    </div>
+    <h5 class="fw-bold mt-4 ms-3 mb-2">Designation of the Sanction Authority:-Commissioner Of Police Hyderabad City
+        OFFICER,T.S.HYD.</h5>
+    <p class="p-0 m-0 fw-bold py-1 ms-3 " style="font-size: 15px;">Note:<span class="fw-semibold">Original Sanction
+            Order should be enclosed</span></p>
+    <div class="border border-2 p-2">
+        <h5 class="fw-bold text-center">BUDGET PARTICULARS</h5>
+        <div class="d-flex mt-4 p-2">
+            <p class="p-0 m-0 col-7 fw-bold">Budget Provided</p>
+            <p class="p-0 m-0 col-2 fw-semibold">12,00,000.00</p>
+        </div>
+        <div class="d-flex mt-2 p-2">
+            <p class="p-0 m-0 col-7 fw-bold">Quarter Budget Allowance:</p>
+            <p class="p-0 m-0 fw-semibold">0.00</p>
+        </div>
+        <div class="d-flex mt-2 p-2">
+            <p class="p-0 m-0 col-7 fw-bold">Expenditure including this bill:</p>
+            <p class="p-0 m-0 fw-semibold">5,38,875.00</p>
+        </div>
+        <div class="d-flex mt-2 p-2">
+            <p class="p-0 m-0 col-7 fw-bold">In Transit</p>
+            <p class="p-0 m-0 fw-semibold">0.00</p>
+        </div>
+        <div class="d-flex mt-2 p-2">
+            <p class="p-0 m-0 col-7 fw-bold">Balance:<span class="fw-semibold fs-12">(Balance/Qtr Allowance)</span></p>
+            <p class="p-0 m-0 fw-semibold">661125.00</p>
+        </div>
+    </div>
+    <div class="border border-2 p-2 mt-3">
+        <h5 class="fw-bold text-center">Non-Drawal Certificate</h5>
+        <p class="p-1 m-1 fw-semibold" style="font-size:0.9rem">Certified that no amount either in part or full
+            pertining to the bill have been drawn an note to the effect have been recorded in the office copy and
+            preserved in this office</p>
+        <div class="d-flex mt-5 justify-content-end">
+            <p class="mt-2 p-0 fw-semibold">DDO's Signature*</p>
+        </div>
+    </div>
+    <div class="border border-2 p-2 mt-3">
+        <h5 class="fw-bold mt-2">Budget Particulars</h5>
+        <p class="mt-2 pt-2 fw-semibold" style="font-size: 15px;">
+            1.______________________________________________________Yearly Estimated Budget
+            Rs.__________________________</p>
+        <p class="mt-2 pt-2 fw-semibold" style="font-size: 15px;">
+            2.______________________________________________________Amount including this bill
+            Rs.__________________________</p>
+        <p class="mt-2 pt-2 fw-semibold" style="font-size: 15px;">
+            3.Balance___________________________________________Rs.__________________________</p>
+        <p class="mt-5  fw-semibold" style="font-size: 15px;">Passed for Rs.<u class="px-1">{{billData[0].net_amount}}</u>Rupees<u
+                class="px-1">{{billData[0].net_amount | numberToWord}} Only.</u>Paid by Cash/Adjustment/Cheque/Draft</p>
+        <div class="d-flex justify-content-end">
+            <p class="mt-5 fw-semibold" style="font-size: 15px;">DDO's SIGNATURE*</p>
+        </div>
+    </div>
+    <div class="col-4 border border-2 p-2 mt-3 pb-5">
+        <p class="p-0 m-0  fw-bold">Signature Valid</p>
+        <p class="p-0 m-0 mt-2 fw-bold">G SATHYANARAYANA</p>
+        <p class="p-0 m-0 fw-semibold">(Asst Accounts Officer)</p>
+        <p class="p-0 m-0 fw-semibold">Dual Authenticated: 13-02-2023 11:20</p>
+    </div>
+    <div class="d-flex justify-content-center mt-5" id="printBill">
+        <a class="btn btn-success text-white" onclick="window.print()">Print</a>
+    </div>
+</div>

@@ -78,7 +78,7 @@ CREATE TABLE bill_multiple_party(
     transaction_id INT REFERENCES transactions(id),
     agency_name VARCHAR(200),
     agency_account_number VARCHAR(20),
-    ifsc_code INT
+    ifsc_code INT,
     gross BIGINT,
     pt_deduction BIGINT,
     tds BIGINT,
@@ -104,6 +104,7 @@ CREATE TABLE scrutiny_items(
 
 CREATE TABLE scrutiny_answers(
     id BIGSERIAL PRIMARY KEY,
+    bill_id INT REFERENCES bills(id);
     question VARCHAR(250),
     asnwer VARCHAR(10)
 );

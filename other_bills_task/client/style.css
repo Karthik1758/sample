@@ -14,3 +14,28 @@ body{
 table th span{
     font-size: 10px;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  display: none;
+}
+@media print{
+    body{
+        position: static;
+    }
+    body *{
+        visibility: hidden;
+    }
+    #bill{
+        width:100% !important;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    #bill,
+    #bill *{
+        visibility: visible;
+    }
+    #printBill *{
+        visibility: hidden;
+    }
+}

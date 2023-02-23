@@ -34,7 +34,7 @@ class AddAgencyRequest extends FormRequest
         return [
             'min'=>'Account should be more than 12 characters',
             'account_number.max'=>'Account should be Less than 22 characters',
-            'account_number.confirmed'=>'Account numbers Do not match'
+            'account_number.confirmed'=>"Account Number Don't Matched"
         ];
     }
 }
