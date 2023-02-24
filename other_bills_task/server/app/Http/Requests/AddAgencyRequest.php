@@ -25,7 +25,7 @@ class AddAgencyRequest extends FormRequest
     {
         return [
             'name'=>'required',
-            'account_number' => 'required|min:12|max:22|confirmed',
+            'account_number' => 'required|min:12|max:22',
             'ifsc_code'=>'required',
         ];
     }
@@ -34,7 +34,7 @@ class AddAgencyRequest extends FormRequest
         return [
             'min'=>'Account should be more than 12 characters',
             'account_number.max'=>'Account should be Less than 22 characters',
-            'account_number.confirmed'=>"Account Number Don't Matched"
+            // 'account_number.confirmed'=>"Account Number Don't Matched"
         ];
     }
 }
