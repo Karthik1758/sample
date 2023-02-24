@@ -15,9 +15,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.js"></script>
     <script src="https://kit.fontawesome.com/3b6311e0b4.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/1.0.30/angular-ui-router.js"
-    integrity="sha512-5J08Lq3B2EfuPrNSYckUPHKYHaUhCQ4MdeObdcR0YZnr8eapZ7XMA2ejUyQYpWN+fwO48wuxsL5KDZYIVVVxvg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>    <link rel="stylesheet" href="style.css">
+        integrity="sha512-5J08Lq3B2EfuPrNSYckUPHKYHaUhCQ4MdeObdcR0YZnr8eapZ7XMA2ejUyQYpWN+fwO48wuxsL5KDZYIVVVxvg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
 
@@ -66,9 +67,10 @@
             </div>
         </div>
         <div class="body d-lg-flex">
-            <div class="sidebar col-2 d-md-block d-none align-items-center" style="min-height: 100%;background-color: #1b354d;font-size: 15px;">
-                <ul class="list-group rounded-0" >
-                    <a class="list-group-item rounded-0 d-flex gap-2 text-white" >
+            <div class="sidebar col-2 d-md-block d-none align-items-center"
+                style="min-height: 100%;background-color: #1b354d;font-size: 15px;">
+                <ul class="list-group rounded-0">
+                    <a class="list-group-item rounded-0 d-flex gap-2 text-white">
                         <i class="fas fa-house mt-1" style="font-size: 15px;font-weight: 10;"></i>
                         <span style="font-weight: 10;">Home</span>
                     </a>
@@ -89,6 +91,10 @@
                     <a class="list-group-item" href="">DDO Reconciliation</a>
                     <a class="list-group-item" href="">E-Bill Particulars</a>
                 </ul>
+            </div>
+            <div class="loader position-fixed text-dark top-0 start-0 d-flex align-items-center justify-content-center bg-white bg-opacity-25 vh-100 vw-100"
+                ng-show="isLoading ">
+                <p class="spinner-border text-primary"></p>
             </div>
             <div class="content overflow-auto p-2 col-10 ps-3" ui-view style="max-height: 100%;"></div>
         </div>

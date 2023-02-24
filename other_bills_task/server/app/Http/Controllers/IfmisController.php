@@ -18,6 +18,7 @@ use App\Models\IfscCode;
 use App\Models\ScrutinyAnswers;
 use App\Models\ScrutinyItem;
 use App\Models\Transaction;
+use DB;
 use Illuminate\Http\Request;
 
 class IfmisController extends Controller
@@ -26,6 +27,12 @@ class IfmisController extends Controller
     {
         $ifsc_code = $request->get('ifsc_code');
         $details = IfscCode::where('ifsc_code', $ifsc_code)->first();
+        if (!$details) {
+            return response()->json([
+                "status" => false,
+                "message" => 'IFSC Details Not Found',
+            ]);
+        }
         return response()->json([
             "status" => true,
             "data" => $details,
@@ -95,75 +102,89 @@ class IfmisController extends Controller
     public function getHoaScrutinyItems(Request $request)
     {
         $form_type_id = $request->get('form_type_id');
-        $hoa = FormType::where('id', $form_type_id)->first()->formHoaTypeMapping;
-        $scrutinyItems = FormType::where('id', $form_type_id)->first()->scrutinyItems;
-        // dd($scrutinyItems->toArray());
+        $data = FormType::
+            with('formHoaTypeMapping')
+            ->with('scrutinyItems')
+            ->where('id', $form_type_id)
+            ->get()->toArray();
         return response()->json([
             "status" => true,
             "message" => "data retrieved",
-            "data" => [
-                "hoas" => $hoa,
-                "scrutinyItems" => $scrutinyItems
-            ],
+            "data" => $data
         ]);
     }
 
     public function submitBill(SubmitBillRequest $request)
     {
-        $transaction = new Transaction();
-        $transaction->form_number = $request->get('form_number');
-        $transaction->form_type = $request->get('form_type');
-        $transaction->hoa = $request->get('hoa');
-        $transaction->reference_number = $request->get("reference_number");
-        $transaction->purpose = $request->get("purpose");
-        $transaction->gross = $request->get('gross');
-        $transaction->pt_deduction = $request->get('pt_deduction');
-        $transaction->tds = $request->get('tds');
-        $transaction->gst = $request->get('gst');
-        $transaction->gis = $request->get('gis');
-        $transaction->telangana_haritha_nidhi = $request->get('telangana_haritha_nidhi');
-        $transaction->net_amount = $request->get('net_amount');
-        $transaction->save();
+        DB::beginTransaction();
+        try {
+            $transaction = new Transaction();
+            $transaction->form_number = $request->get('form_number');
+            $transaction->form_type = $request->get('form_type');
+            $transaction->hoa = $request->get('hoa');
+            $transaction->reference_number = $request->get("reference_number");
+            $transaction->purpose = $request->get("purpose");
+            $transaction->gross = $request->get('gross');
+            $transaction->pt_deduction = $request->get('pt_deduction');
+            $transaction->tds = $request->get('tds');
+            $transaction->gst = $request->get('gst');
+            $transaction->gis = $request->get('gis');
+            $transaction->telangana_haritha_nidhi = $request->get('telangana_haritha_nidhi');
+            $transaction->net_amount = $request->get('net_amount');
+            $transaction->save();
 
-        $scrutiny_answers = json_decode($request->get('scrutiny_answers'));
-        foreach ($scrutiny_answers as $scrutinyAnswer) {
-            $scrutiny = new ScrutinyAnswers();
-            $scrutiny->description = $scrutinyAnswer->description;
-            $scrutiny->answer = $scrutinyAnswer->answer;
-            $scrutiny->transaction_id = $transaction->id;
-            $scrutiny->save();
-        }
-        $bill_multiple_parties = json_decode($request->get('agency_bill'));
-        foreach ($bill_multiple_parties as $bill_multiple_party) {
-            $party = new BillMultipleParty();
-            $party->transaction_id = $transaction->id;
-            $party->agency_name = $bill_multiple_party->agency_name;
-            $party->agency_account_number = $bill_multiple_party->agency_account_number;
-            $party->agency_bank_name = $bill_multiple_party->agency_bank_name;
-            $party->agency_branch = $bill_multiple_party->agency_branch;
-            $party->ifsc_code = $bill_multiple_party->agency_ifsc_code;
-            $party->gross = $bill_multiple_party->agency_gross;
-            $party->pt_deduction = $bill_multiple_party->agency_pt_deduction;
-            $party->tds = $bill_multiple_party->agency_tdsIt;
-            $party->gst = $bill_multiple_party->agency_gst;
-            $party->gis = $bill_multiple_party->agency_gis;
-            $party->telangana_haritha_nidhi = $bill_multiple_party->agency_telangana_haritha_nidhi;
-            $party->net_amount = $bill_multiple_party->agency_net_amount;
-            $party->save();
-        }
-        $files = $request->file('files');
-        if ($files != null) {
-            $attachments = json_decode($request->get('attachments_array'));
-            foreach ($files as $index => $file) {
-                $path = $file->store('files');
-                $attachment = new Attachment();
-                $attachment->transaction_id = $transaction->id;
-                $attachment->file_path = $path;
-                $attachment->remarks = $attachments[$index]->remarks;
-                $attachment->save();
+            $scrutiny_answers = json_decode($request->get('scrutiny_answers'));
+            $scrutiny = [];
+            foreach ($scrutiny_answers as $scrutinyAnswer) {
+                $scrutiny[] = [
+                    'transaction_id' => $transaction->id,
+                    'description' => $scrutinyAnswer->description,
+                    'answer' => $scrutinyAnswer->answer
+                ];
             }
+            ScrutinyAnswers::insert($scrutiny);
+            $bill_multiple_parties = json_decode($request->get('agency_bill'));
+            $party = [];
+            foreach ($bill_multiple_parties as $bill_multiple_party) {
+                $party[] = [
+                    'transaction_id' => $transaction->id,
+                    'agency_name' => $bill_multiple_party->agency_name,
+                    'agency_account_number' => $bill_multiple_party->agency_account_number,
+                    'ifsc_code' => $bill_multiple_party->agency_ifsc_code,
+                    'gross' => $bill_multiple_party->agency_gross,
+                    'pt_deduction' => $bill_multiple_party->agency_pt_deduction,
+                    'tds' => $bill_multiple_party->agency_tdsIt,
+                    'gst' => $bill_multiple_party->agency_gst,
+                    'gis' => $bill_multiple_party->agency_gis,
+                    'telangana_haritha_nidhi' => $bill_multiple_party->agency_telangana_haritha_nidhi,
+                    'net_amount' => $bill_multiple_party->agency_net_amount,
+                    'agency_bank_name' => $bill_multiple_party->agency_bank_name,
+                    'agency_branch' => $bill_multiple_party->agency_branch
+                ];
+            }
+            BillMultipleParty::insert($party);
+            $files = $request->file('files');
+            if ($files != null) {
+                $attachments = json_decode($request->get('attachments_array'));
+                foreach ($files as $index => $file) {
+                    $path = $file->store('files');
+                    $attachment = new Attachment();
+                    $attachment->transaction_id = $transaction->id;
+                    $attachment->file_path = $path;
+                    $attachment->remarks = $attachments[$index]->remarks;
+                    $attachment->save();
+                }
+            }
+            DB::commit();
+            return response()->json(['status' => true, "message" => "Bill Added Successfully", "data" => $transaction->id]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => false,
+                "message" => 'Bill Submission Failed',
+                'data' => $e
+            ]);
         }
-        return response()->json(['status' => true, "message" => "Bill Added Successfully", "data" => $transaction->id]);
     }
     public function getTransactionDetails(Request $request)
     {
@@ -175,19 +196,17 @@ class IfmisController extends Controller
                 }
             ])
             ->with('hoa')
+            ->with('multipleParties')
             ->where('id', $id)
             ->get()->toArray();
         if (!$transaction) {
             return response()->json(['status' => false, "message" => "Bill Not Found"]);
         }
-        $bill_multiple_parties = Transaction::where('id', $id)->first()->multipleParties;
+        // $bill_multiple_parties = Transaction::where('id', $id)->first()->multipleParties;
         return response()->json([
             'status' => true,
             "message" => "Bill Details",
-            'data' => [
-                "transaction" => $transaction,
-                'agenciesBill' => $bill_multiple_parties
-            ]
+            'data' => $transaction
         ]);
     }
 

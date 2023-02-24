@@ -1,6 +1,33 @@
 let app = angular.module('ifmis', ['ui.router'])
+app.run(function ($rootScope) {
+	$rootScope.url = 'http://127.0.0.1:8000/api';
+	$rootScope.isLoading = false;
 
-app.config(['$stateProvider', function ($stateProvider) {
+	$rootScope.$on('httpRequest', function () {
+		$rootScope.isLoading = true;
+	});
+
+	$rootScope.$on('httpResponse', function () {
+		$rootScope.isLoading = false;
+	});
+})
+app.factory('httpInterceptor', function ($q, $rootScope) {
+	return {
+		request: function (config) {
+			$rootScope.$emit('httpRequest');
+			return config || $q.when(config);
+		},
+		response: function (response) {
+			$rootScope.$emit('httpResponse');
+			return response || $q.when(response);
+		},
+		responseError: function (rejection) {
+			$rootScope.$emit('httpResponse');
+			return $q.reject(rejection);
+		}
+	};
+});
+app.config(function ($stateProvider, $httpProvider) {
 	$stateProvider
 		.state('addAgency', {
 			url: '/addAgency',
@@ -16,10 +43,10 @@ app.config(['$stateProvider', function ($stateProvider) {
 			url: '/viewBill?id',
 			templateUrl: 'viewBill.html'
 		});
-}
-]);
+	$httpProvider.interceptors.push('httpInterceptor');
+});
 
-app.controller('AddAgencyController', function ($scope, $http) {
+app.controller('AddAgencyController', function ($scope, $http, $rootScope) {
 	$scope.editable = "false";
 	$scope.clear = function () {
 		$scope.ifscCodeInput = "",
@@ -40,7 +67,7 @@ app.controller('AddAgencyController', function ($scope, $http) {
 		console.log($scope.ifscCodeInput);
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/getIfscCodeDetails',
+			url: $rootScope.url + '/getIfscCodeDetails',
 			data: {
 				ifsc_code: $scope.ifscCodeInput
 			},
@@ -66,7 +93,7 @@ app.controller('AddAgencyController', function ($scope, $http) {
 	$scope.addAgency = function () {
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/addAgency',
+			url: $rootScope.url + '/addAgency',
 			data: {
 				name: $scope.agencyNameInput,
 				account_number: $scope.bankAccountNumberInput,
@@ -98,7 +125,7 @@ app.controller('AddAgencyController', function ($scope, $http) {
 		$scope.found = false;
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/getAgency',
+			url: $rootScope.url + '/getAgency',
 			data: {
 				account_number: $scope.accountNumber
 			},
@@ -126,7 +153,7 @@ app.controller('AddAgencyController', function ($scope, $http) {
 			}
 			$http({
 				method: 'POST',
-				url: 'http://127.0.0.1:8000/api/editAgency/' + $scope.agencyDetails.id,
+				url: $rootScope.url + '/editAgency/' + $scope.agencyDetails.id,
 				data: {
 					name: $scope.agencyName,
 					ifsc_code: $scope.ifscCodeInput
@@ -149,12 +176,12 @@ app.controller('AddAgencyController', function ($scope, $http) {
 	}
 });
 
-app.controller('AddBillController', function ($scope, $http, $filter, $state) {
+app.controller('AddBillController', function ($scope, $http, $filter, $state, $rootScope) {
 	$scope.formDetails = [];
 	$scope.found = false;
 	$http({
 		method: 'POST',
-		url: 'http://127.0.0.1:8000/api/getFormNumber',
+		url: $rootScope.url + '/getFormNumber',
 	}).then(
 		function (response) {
 			if (response.data.status == true) {
@@ -173,7 +200,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 		$scope.clear();
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/getFormType',
+			url: $rootScope.url + '/getFormType',
 			data: {
 				form_number_id: $scope.formNumberSelect
 			},
@@ -196,7 +223,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 		$scope.found = false;
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/getAgency',
+			url: $rootScope.url + '/getAgency',
 			data: {
 				account_number: $scope.accountNumber
 			},
@@ -237,12 +264,13 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 		$scope.netAmount = parseInt($scope.gross) + parseInt($scope.ptDeduction) + parseInt($scope.tdsIt) + parseInt($scope.gst) + parseInt($scope.gis) + parseInt($scope.telanganaHarithaNidhi);
 	}
 	$scope.addBill = function () {
-		// $scope.agencyBill.forEach(element => {
-		// 	if (element.account_number == $scope.agencyBill.agency_account_number) {
-		// 		swal("Error", "Agency Already Added", "error");
-		// 		return;
-		// 	}
-		// });
+		$scope.agencyBill.forEach(element => {
+			if (element.account_number == $scope.agencyBill.agency_account_number) {
+				swal("Error", "Agency Already Added", "error");
+				$scope.agencyDetails = {};
+				return;
+			}
+		});
 		console.log($scope.gis);
 		if ($scope.gross > 0 && !isNaN($scope.netAmount)) {
 			$scope.billList = true;
@@ -281,15 +309,15 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 		$scope.clear();
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/getHoaScrutinyItems',
+			url: $rootScope.url + '/getHoaScrutinyItems',
 			data: {
 				form_type_id: $scope.formTypeSelect
 			},
 		}).then(
 			function (response) {
 				if (response.data.status == true) {
-					$scope.hoaDetails = response.data.data.hoas;
-					response.data.data.scrutinyItems.forEach(element => {
+					$scope.hoaDetails = response.data.data[0].form_hoa_type_mapping;
+					response.data.data[0].scrutiny_items.forEach(element => {
 						$scope.scrutinyAnswers.push({
 							'description': element.description,
 							'answer': 'yes'
@@ -301,7 +329,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 			}
 		).catch(
 			function (response) {
-				console.log(response.data.message);
+				console.log(response);
 			}
 		)
 	}
@@ -374,7 +402,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 			hoa: $scope.selectHoa,
 			reference_number: $scope.referenceNumber,
 			purpose: $scope.purpose,
-			otp:$scope.otpVerified,
+			otp: $scope.otpVerified,
 			scrutiny_answers: JSON.stringify($scope.scrutinyAnswers),
 			attachments_array: JSON.stringify($scope.attachmentsArray),
 			gross: $filter('sumOfValue')($scope.agencyBill, 'agency_gross'),
@@ -394,7 +422,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 		})
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:8000/api/submitBill',
+			url: $rootScope.url + '/submitBill',
 			headers: { 'Content-Type': undefined },
 			transformRequest: angular.identity,
 			data: formData
@@ -418,21 +446,21 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state) {
 	}
 });
 
-app.controller('ViewBillController', function ($scope, $http, $stateParams) {
+app.controller('ViewBillController', function ($scope, $http, $stateParams, $rootScope) {
 	$http({
 		method: 'POST',
-		url: 'http://127.0.0.1:8000/api/getTransactionDetails',
+		url: $rootScope.url + '/getTransactionDetails',
 		data: {
 			id: $stateParams.id
 		},
 	}).then(
 		function (response) {
 			if (response.data.status == true) {
-				$scope.billData = response.data.data.transaction;
-				$scope.agencyBill = response.data.data.agenciesBill;
+				$scope.billData = response.data.data;
+				$scope.agencyBill = response.data.data[0].multiple_parties;
 			} else {
 				console.log(response);
-				swal('Error',response.data.message,'error');
+				swal('Error', response.data.message, 'error');
 			}
 		}).catch(
 			function (response) {
