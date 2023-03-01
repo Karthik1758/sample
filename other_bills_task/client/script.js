@@ -11,6 +11,7 @@ app.run(function ($rootScope) {
 		$rootScope.isLoading = false;
 	});
 })
+
 app.factory('httpInterceptor', function ($q, $rootScope) {
 	return {
 		request: function (config) {
@@ -27,6 +28,7 @@ app.factory('httpInterceptor', function ($q, $rootScope) {
 		}
 	};
 });
+
 app.config(function ($stateProvider, $httpProvider) {
 	$stateProvider
 		.state('addAgency', {
@@ -96,6 +98,7 @@ app.controller('AddAgencyController', function ($scope, $http, $rootScope) {
 			url: $rootScope.url + '/addAgency',
 			data: {
 				name: $scope.agencyNameInput,
+				verified: $scope.ifsc,
 				account_number: $scope.bankAccountNumberInput,
 				account_number_confirmation: $scope.confirmBankAccountNumberInput,
 				ifsc_code: $scope.ifscCodeInput
@@ -147,23 +150,20 @@ app.controller('AddAgencyController', function ($scope, $http, $rootScope) {
 				}
 			)
 		$scope.editAgency = function () {
-			if (!$scope.ifsc) {
-				swal("Error", "Please Validate the IFSC Code", "error");
-				return;
-			}
 			$http({
 				method: 'POST',
 				url: $rootScope.url + '/editAgency/' + $scope.agencyDetails.id,
 				data: {
-					name: $scope.agencyName,
-					ifsc_code: $scope.ifscCodeInput
+					name: $scope.agencyDetails.name,
+					ifsc_code: $scope.ifscCodeInput,
+					verified: $scope.ifsc,
 				},
 			}).then(
 				function (response) {
 					if (response.data.status == true) {
 						swal("Success", response.data.message, "success");
 					} else {
-						swal("Error", response.data.errors[(Object.keys(response.data.errors))[0]][0], "error");
+						swal("Error", response.data.message, "error");
 					}
 				}).catch(
 					function (response) {
@@ -265,7 +265,7 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state, $r
 	}
 	$scope.addBill = function () {
 		$scope.agencyBill.forEach(element => {
-			if (element.account_number == $scope.agencyBill.agency_account_number) {
+			if (element.agency_account_number == $scope.agencyDetails.account_number) {
 				swal("Error", "Agency Already Added", "error");
 				$scope.agencyDetails = {};
 				return;
@@ -405,13 +405,13 @@ app.controller('AddBillController', function ($scope, $http, $filter, $state, $r
 			otp: $scope.otpVerified,
 			scrutiny_answers: JSON.stringify($scope.scrutinyAnswers),
 			attachments_array: JSON.stringify($scope.attachmentsArray),
-			gross: $filter('sumOfValue')($scope.agencyBill, 'agency_gross'),
-			pt_deduction: $filter('sumOfValue')($scope.agencyBill, 'agency_pt_deduction'),
-			tds: $filter('sumOfValue')($scope.agencyBill, 'agency_tdsIt'),
-			gst: $filter('sumOfValue')($scope.agencyBill, 'agency_gst'),
-			gis: $filter('sumOfValue')($scope.agencyBill, 'agency_gis'),
-			telangana_haritha_nidhi: $filter('sumOfValue')($scope.agencyBill, 'agency_telangana_haritha_nidhi'),
-			net_amount: $filter('sumOfValue')($scope.agencyBill, 'agency_net_amount'),
+			// gross: $filter('sumOfValue')($scope.agencyBill, 'agency_gross'),
+			// pt_deduction: $filter('sumOfValue')($scope.agencyBill, 'agency_pt_deduction'),
+			// tds: $filter('sumOfValue')($scope.agencyBill, 'agency_tdsIt'),
+			// gst: $filter('sumOfValue')($scope.agencyBill, 'agency_gst'),
+			// gis: $filter('sumOfValue')($scope.agencyBill, 'agency_gis'),
+			// telangana_haritha_nidhi: $filter('sumOfValue')($scope.agencyBill, 'agency_telangana_haritha_nidhi'),
+			// net_amount: $filter('sumOfValue')($scope.agencyBill, 'agency_net_amount'),
 		};
 		let formData = new FormData();
 		for (let ele in data) {
@@ -647,5 +647,6 @@ app.filter('numberToWord', function () {
 	}
 
 });
+
 
 

@@ -40,6 +40,9 @@ class IfmisController extends Controller
     }
     public function addAgency(AddAgencyRequest $request)
     {
+        if ($request->get('verified') == false) {
+            return response()->json(['status' => false, "message" => "Please Verify Ifsc Code Before Submitting"]);
+        }
         if (Agency::where('account_number', $request->account_number)->exists()) {
             return response()->json(['status' => false, "message" => "Agency Already Exists"]);
         }
@@ -72,8 +75,11 @@ class IfmisController extends Controller
     }
     public function editAgency(EditAgencyRequest $request, Agency $agency)
     {
-        if (!IfscCode::where('ifsc_code', $request->ifsc_code)->exists()) {
-            return response()->json(['status' => false, "message" => "Enter Valid IFSC Code"]);
+        if ($request->get('verified') == false && $request->get('ifsc_code') != '') {
+            if (!IfscCode::where('ifsc_code', $request->ifsc_code)->exists()) {
+                return response()->json(['status' => false, "message" => "Enter Valid IFSC Code"]);
+            }
+            return response()->json(['status' => false, "message" => "Please Verify Ifsc Code Before Submitting"]);
         }
         $agency->update($request->all());
         return response()->json(['status' => true, "message" => "Agency Updated Successfully"]);
@@ -103,9 +109,11 @@ class IfmisController extends Controller
     {
         $form_type_id = $request->get('form_type_id');
         $data = FormType::
-            with('formHoaTypeMapping')
-            ->with('scrutinyItems')
-            ->where('id', $form_type_id)
+            where('id', $form_type_id)
+            ->with('formHoaTypeMapping:hoa,hoa_tier')
+            ->with(
+                'scrutinyItems'
+            )
             ->get()->toArray();
         return response()->json([
             "status" => true,
@@ -118,19 +126,29 @@ class IfmisController extends Controller
     {
         DB::beginTransaction();
         try {
+
+            $bill_multiple_parties = json_decode($request->get('agency_bill'));
+            $gross = collect($bill_multiple_parties)->sum('agency_gross');
+            $pt_deduction = collect($bill_multiple_parties)->sum('agency_pt_deduction');
+            $tds = collect($bill_multiple_parties)->sum('agency_tdsIt');
+            $gst = collect($bill_multiple_parties)->sum('agency_gst');
+            $gis = collect($bill_multiple_parties)->sum('agency_gis');
+            $telangana_haritha_nidhi = collect($bill_multiple_parties)->sum('agency_telangana_haritha_nidhi');
+            $net_amount = collect($bill_multiple_parties)->sum('agency_net_amount');
+
             $transaction = new Transaction();
             $transaction->form_number = $request->get('form_number');
             $transaction->form_type = $request->get('form_type');
             $transaction->hoa = $request->get('hoa');
             $transaction->reference_number = $request->get("reference_number");
             $transaction->purpose = $request->get("purpose");
-            $transaction->gross = $request->get('gross');
-            $transaction->pt_deduction = $request->get('pt_deduction');
-            $transaction->tds = $request->get('tds');
-            $transaction->gst = $request->get('gst');
-            $transaction->gis = $request->get('gis');
-            $transaction->telangana_haritha_nidhi = $request->get('telangana_haritha_nidhi');
-            $transaction->net_amount = $request->get('net_amount');
+            $transaction->gross = $gross;
+            $transaction->pt_deduction = $pt_deduction;
+            $transaction->tds = $tds;
+            $transaction->gst = $gst;
+            $transaction->gis = $gis;
+            $transaction->telangana_haritha_nidhi = $telangana_haritha_nidhi;
+            $transaction->net_amount = $net_amount;
             $transaction->save();
 
             $scrutiny_answers = json_decode($request->get('scrutiny_answers'));
@@ -143,7 +161,6 @@ class IfmisController extends Controller
                 ];
             }
             ScrutinyAnswers::insert($scrutiny);
-            $bill_multiple_parties = json_decode($request->get('agency_bill'));
             $party = [];
             foreach ($bill_multiple_parties as $bill_multiple_party) {
                 $party[] = [
@@ -196,7 +213,12 @@ class IfmisController extends Controller
                 }
             ])
             ->with('hoa')
-            ->with('multipleParties')
+            ->with([
+                'multipleParties' => function ($q) {
+                    $q->with('ifscCode:ifsc_code,bank_name,state,branch');
+                }
+            ])
+
             ->where('id', $id)
             ->get()->toArray();
         if (!$transaction) {

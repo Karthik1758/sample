@@ -36,5 +36,6 @@ class Transaction extends Model
     public function hoa(){
         return $this->hasOne(Hoa::class,'hoa','hoa');
     }
+    
 
 }
